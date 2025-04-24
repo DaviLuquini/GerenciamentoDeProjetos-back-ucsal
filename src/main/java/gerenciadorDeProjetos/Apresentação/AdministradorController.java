@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gerenciadorDeProjetos.Aplicação.DTOs.GrupoRequest;
-import gerenciadorDeProjetos.Aplicação.DTOs.ProjetoRequest;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IGrupoAppServiço;
-import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProjetoAppServiço;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @SecurityRequirement(name = "bearerAuth")
@@ -25,9 +23,6 @@ public class AdministradorController {
 	@Autowired
 	private IGrupoAppServiço grupoServiço;
 
-	@Autowired
-	private IProjetoAppServiço projetoServiço;
-
 	@PostMapping("/cadastrarGrupo")
 	public ResponseEntity<String> cadastrarGrupo(@RequestBody GrupoRequest request) {
 		if (grupoServiço.grupoNomeEmUso(request.getNome())) {
@@ -38,8 +33,8 @@ public class AdministradorController {
 
 		return ResponseEntity.status(HttpStatus.CREATED).body("Grupo cadastrado com sucesso");
 	}
-
-	@PostMapping("/atualizarGrupo")
+	
+    @PostMapping("/atualizarGrupo")
 	public ResponseEntity<String> atualizarGrupo(@RequestBody GrupoRequest request) {
 		if (!grupoServiço.grupoNomeEmUso(request.getNome())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Nome do Grupo não encotrado!");
@@ -48,16 +43,5 @@ public class AdministradorController {
 		grupoServiço.atualizarGrupo(request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body("Grupo atualizado com sucesso");
-	}
-
-	@PostMapping("/atualizarProjeto")
-	public ResponseEntity<String> atualizarProjeto(@RequestBody ProjetoRequest request) {
-		if (!projetoServiço.projetoNomeEmUso(request.getNome())) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Nome do Projeto não encotrado!");
-		}
-
-		projetoServiço.atualizarProjeto(request);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body("Projeto atualizado com sucesso");
 	}
 }

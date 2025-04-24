@@ -9,6 +9,8 @@ public interface IGrupoAppServiço {
     
     List<GrupoRequest> listarGrupos();
     
+    GrupoRequest listarGrupoPorAlunoId(Long AlunoId);
+    
     Grupo cadastrarGrupo(GrupoRequest grupoRequest);
     
     boolean grupoNomeEmUso(String nome);

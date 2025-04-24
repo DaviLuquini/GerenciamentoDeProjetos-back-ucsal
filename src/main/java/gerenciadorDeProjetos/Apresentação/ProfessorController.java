@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import gerenciadorDeProjetos.Aplicação.DTOs.ConfirmarEntregaRequest;
 import gerenciadorDeProjetos.Aplicação.DTOs.ProjetoRequest;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProfessorAppServiço;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProjetoAppServiço;
@@ -31,7 +32,7 @@ public class ProfessorController {
     }
 
     @PostMapping("/confirmarEntregaProjeto")
-    public ResponseEntity<String> confirmarEntregaProjeto(@RequestBody ProjetoRequest request) {
+    public ResponseEntity<String> confirmarEntregaProjeto(@RequestBody ConfirmarEntregaRequest request) {
         if (!projetoServiço.projetoNomeEmUso(request.getNome())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Nome do Projeto não encontrado!");
         }

@@ -26,28 +26,58 @@ public class RegistroController {
     @Autowired
     private IAlunoAppServiço alunoServiço;
 
+    private boolean emailJaCadastrado(String email) {
+        try {
+            administradorServiço.buscarEmail(email);
+            return true;
+        } catch (RuntimeException e) {
+        }
+
+        try {
+            professorServiço.buscarEmail(email);
+            return true;
+        } catch (RuntimeException e) {
+        }
+
+        try {
+            alunoServiço.buscarEmail(email);
+            return true;
+        } catch (RuntimeException e) {
+        }
+
+        return false;
+    }
+
+
     @PostMapping("/admin")
     public ResponseEntity<String> registroAdmin(@RequestBody RegistroRequest request) {
-        if (administradorServiço.buscarEmail(request.getEmail()) != null) {
+        if (emailJaCadastrado(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já está em uso");
         }
 
         administradorServiço.registrar(request.getNome(), request.getEmail(), request.getSenha());
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Administrador registrado com sucesso");
     }
-    
-	@PostMapping("/professor")
-	public ResponseEntity<String> cadastrar(@RequestBody ProfessorRequest request) {
-		professorServiço.cadastrarProfessor(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Professor cadastrado com sucesso");
-	}
-    
-	@PostMapping("/aluno")
-	public ResponseEntity<String> cadastrar(@RequestBody AlunoRequest request) {
-		alunoServiço.cadastrarAluno(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Aluno cadastrado com sucesso");
-	}
 
+    @PostMapping("/professor")
+    public ResponseEntity<String> cadastrarProfessor(@RequestBody ProfessorRequest request) {
+        if (emailJaCadastrado(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já está em uso");
+        }
+
+        professorServiço.cadastrarProfessor(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Professor cadastrado com sucesso");
+    }
+
+    @PostMapping("/aluno")
+    public ResponseEntity<String> cadastrarAluno(@RequestBody AlunoRequest request) {
+        if (emailJaCadastrado(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já está em uso");
+        }
+
+        alunoServiço.cadastrarAluno(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Aluno cadastrado com sucesso");
+    }
 }
+
 

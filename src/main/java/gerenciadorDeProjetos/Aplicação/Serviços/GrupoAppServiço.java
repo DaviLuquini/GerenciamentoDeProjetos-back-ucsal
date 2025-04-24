@@ -99,7 +99,42 @@ public class GrupoAppServiço implements IGrupoAppServiço {
 
         return grupoRequests;
     }
+    
+    @Override
+    public GrupoRequest listarGrupoPorAlunoId(Long alunoId) {
+        List<Grupo> gruposDisponiveis = grupoRepositorio.findByDisponivelTrue();
 
+        for (Grupo grupo : gruposDisponiveis) {
+            boolean alunoPresente = grupo.getAlunos().stream()
+                .anyMatch(aluno -> aluno.getId().equals(alunoId));
+
+            if (alunoPresente) {
+                GrupoRequest request = new GrupoRequest();
+                request.setId(grupo.getId());
+                request.setNome(grupo.getNome());
+                request.setDisponivel(grupo.isDisponivel());
+
+                if (grupo.getProjeto() != null) {
+                    request.setProjetoId(grupo.getProjeto().getId());
+                }
+
+                if (grupo.getProfessor() != null) {
+                    request.setProfessorId(grupo.getProfessor().getId());
+                }
+
+                if (grupo.getAlunos() != null) {
+                    List<Long> alunosIds = grupo.getAlunos().stream()
+                        .map(Aluno::getId)
+                        .collect(Collectors.toList());
+                    request.setAlunosIds(alunosIds);
+                }
+
+                return request; 
+            }
+        }
+
+        return null; 
+    }
 
     @Override
     public void desativarGrupo(String nome) {

@@ -20,6 +20,12 @@ public class GrupoController {
         List<GrupoRequest> grupos = grupoServiço.listarGrupos();
         return ResponseEntity.ok(grupos);
     }
+    
+    @GetMapping("/listarGrupoPorAlunoId")
+    public ResponseEntity<GrupoRequest> listarGrupoPorAlunoId(Long AlunoId) {
+    	GrupoRequest grupo = grupoServiço.listarGrupoPorAlunoId(AlunoId);
+        return ResponseEntity.ok(grupo);
+    }
 
     @DeleteMapping("/desativar")
     public ResponseEntity<Void> desativarGrupo(@RequestParam String nome) {

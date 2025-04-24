@@ -24,7 +24,9 @@ public class AlunoAppServiço implements IAlunoAppServiço {
     public Aluno cadastrarAluno(AlunoRequest request) {
         Aluno aluno = new Aluno();
         aluno.setNome(request.getNome());
-        aluno.setCurso(request.getCurso());
+        aluno.setEmail(request.getEmail());
+        aluno.setSenha(request.getSenha());
+        aluno.setGrupoId(request.getGrupoId());
 
         if (request.getGrupoId() != null) {
             aluno.setGrupo(grupoRepositorio.findById(request.getGrupoId())
