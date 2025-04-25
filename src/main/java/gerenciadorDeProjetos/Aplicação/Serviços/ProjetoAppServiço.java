@@ -146,6 +146,14 @@ public class ProjetoAppServiço implements IProjetoAppServiço {
 	    projetoRepositorio.save(projeto);
 	}
 
+	
+	  @Override
+	    public void deletarProjeto(String nome) {
+		    Projeto projeto = projetoRepositorio.findByNome(nome)
+	            .orElseThrow(() -> new RuntimeException("Professor não encontrado com o email: " + nome));
+	        
+		    projetoRepositorio.delete(projeto);
+	    }
 
 	
     @Override

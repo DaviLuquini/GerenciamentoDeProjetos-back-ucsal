@@ -1,7 +1,9 @@
 package gerenciadorDeProjetos.Aplicação.Serviços;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,4 +84,31 @@ public class ProfessorAppServiço implements IProfessorAppServiço {
 
         return projetoRepo.save(projeto);
     }
+    
+    @Override
+    public List<Professor> listarProfessores() {
+
+        List<Professor> professores = professorRepo.findAll();
+
+        return professores.stream().map(professor -> {
+            Professor dto = new Professor();
+            dto.setId(professor.getId());
+            dto.setNome(professor.getNome());
+            dto.setEmail(professor.getEmail());
+
+
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+    
+    @Override
+    public void deletarProfessor(String email) {
+        Professor professor = professorRepo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Professor não encontrado com o email: " + email));
+        
+        professorRepo.delete(professor);
+    }
+
+
 }

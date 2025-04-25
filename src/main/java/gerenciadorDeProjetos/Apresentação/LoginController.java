@@ -35,19 +35,19 @@ public class LoginController {
 	    if (administradorServiço.logar(request.getEmail(), request.getSenha())) {
 	        Long id = administradorServiço.buscarEmail(request.getEmail());
 	        String token = jwtUtil.generateToken(request.getEmail(), "ROLE_ADMIN");
-	        return ResponseEntity.ok(new LoginResponse("ADMIN", "Bearer " + token, id));
+	        return ResponseEntity.ok(new LoginResponse("ADMIN", token, id));
 	    }
 
 	    if (professorServiço.logar(request.getEmail(), request.getSenha())) {
 	        Long id = professorServiço.buscarEmail(request.getEmail());
 	        String token = jwtUtil.generateToken(request.getEmail(), "ROLE_PROFESSOR");
-	        return ResponseEntity.ok(new LoginResponse("PROFESSOR", "Bearer " + token, id));
+	        return ResponseEntity.ok(new LoginResponse("PROFESSOR", token, id));
 	    }
 
 	    if (alunoServiço.logar(request.getEmail(), request.getSenha())) {
 	        Long id = alunoServiço.buscarEmail(request.getEmail());
 	        String token = jwtUtil.generateToken(request.getEmail(), "ROLE_ALUNO");
-	        return ResponseEntity.ok(new LoginResponse("ALUNO", "Bearer " + token, id));
+	        return ResponseEntity.ok(new LoginResponse("ALUNO", token, id));
 	    }
 
 	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");

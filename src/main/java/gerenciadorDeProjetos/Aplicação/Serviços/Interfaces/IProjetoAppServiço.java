@@ -13,4 +13,5 @@ public interface IProjetoAppServiço {
 	public Projeto atualizarProjeto(AtualizarProjetoRequest request);
 	public void confirmarEntrega(Long Id);
 	boolean projetoNomeEmUso(String nome);
+	void deletarProjeto(String nome);
 }

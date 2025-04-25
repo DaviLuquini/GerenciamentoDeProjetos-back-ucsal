@@ -1,5 +1,7 @@
 package gerenciadorDeProjetos.Apresentação;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import gerenciadorDeProjetos.Aplicação.DTOs.ConfirmarEntregaRequest;
 import gerenciadorDeProjetos.Aplicação.DTOs.ProjetoRequest;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProfessorAppServiço;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IProjetoAppServiço;
+import gerenciadorDeProjetos.Dominio.Professor;
 import gerenciadorDeProjetos.Dominio.Projeto;
 
 @RestController
@@ -21,6 +24,13 @@ public class ProfessorController {
     @Autowired
     private IProjetoAppServiço projetoServiço;
 
+    
+    @GetMapping("/listarProfessores")
+    public ResponseEntity<List<Professor>> listarProfessores() {
+    	 List<Professor> professores = professorServiço.listarProfessores();
+         return ResponseEntity.ok(professores);
+    }
+    
     @PostMapping("/solicitarProjeto")
     public ResponseEntity<Projeto> solicitarProjeto(@RequestBody ProjetoRequest projetoRequest) {
         try {

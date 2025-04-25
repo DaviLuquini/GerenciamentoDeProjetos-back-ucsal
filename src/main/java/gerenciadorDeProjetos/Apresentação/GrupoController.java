@@ -3,6 +3,7 @@ package gerenciadorDeProjetos.Apresentação;
 import gerenciadorDeProjetos.Aplicação.DTOs.GrupoRequest;
 import gerenciadorDeProjetos.Aplicação.Serviços.Interfaces.IGrupoAppServiço;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +23,13 @@ public class GrupoController {
     }
     
     @GetMapping("/listarGrupoPorAlunoId")
-    public ResponseEntity<GrupoRequest> listarGrupoPorAlunoId(Long AlunoId) {
-    	GrupoRequest grupo = grupoServiço.listarGrupoPorAlunoId(AlunoId);
-        return ResponseEntity.ok(grupo);
-    }
+    public ResponseEntity<?> listarGrupoPorAlunoIds(Long alunoId) {
+        GrupoRequest grupo = grupoServiço.listarGrupoPorAlunoId(alunoId);
 
-    @DeleteMapping("/desativar")
-    public ResponseEntity<Void> desativarGrupo(@RequestParam String nome) {
-        grupoServiço.desativarGrupo(nome);
-        return ResponseEntity.noContent().build();
+        if (grupo == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Grupo não encontrado para o aluno.");
+        }
+
+        return ResponseEntity.ok(grupo);
     }
 }
